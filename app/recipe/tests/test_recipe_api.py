@@ -17,6 +17,7 @@ from recipe.serializers import (
 
 RECIPES_URL = reverse('recipe:recipe-list')
 
+
 def detail_url(recipe_id):
     return reverse('recipe:recipe-detail', args=[recipe_id])
 
@@ -34,8 +35,10 @@ def create_recipe(user, **params):
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
 
+
 def create_user(**params):
     return get_user_model().objects.create_user(**params)
+
 
 class PublicRecipeAPITests(TestCase):
 
@@ -177,8 +180,10 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_delete_other_users_recipe_error(self):
 
-        new_user = create_user(email='user3@example.com', password='1234password')
-        recipe = create_recipe(user=self.user)
+        new_user = create_user(
+            email='user3@example.com',
+            password='1234password')
+        recipe = create_recipe(user=new_user)
 
         url = detail_url(recipe.id)
         res = self.client.delete(url)
