@@ -1,6 +1,13 @@
+"""
+Serializers for recipe APIs
+"""
 from rest_framework import serializers
 
-from core.models import Recipe, Tag, Ingredient
+from core.models import (
+    Recipe,
+    Tag,
+    Ingredient,
+)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -13,6 +20,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
+    """Serializer for tags."""
 
     class Meta:
         model = Tag
@@ -21,14 +29,16 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-
+    """Serializer for recipes."""
     tags = TagSerializer(many=True, required=False)
     ingredients = IngredientSerializer(many=True, required=False)
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'time_minutes', 'price', 'link',
-        'tags', 'ingredients']
+        fields = [
+            'id', 'title', 'time_minutes', 'price', 'link', 'tags',
+            'ingredients',
+        ]
         read_only_fields = ['id']
 
     def _get_or_create_tags(self, tags, recipe):
@@ -52,7 +62,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             recipe.ingredients.add(ingredient_obj)
 
     def create(self, validated_data):
-
         """Create a recipe."""
         tags = validated_data.pop('tags', [])
         ingredients = validated_data.pop('ingredients', [])
@@ -81,9 +90,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeDetailSerializer(RecipeSerializer):
+    """Serializer for recipe detail view."""
 
     class Meta(RecipeSerializer.Meta):
-        fields = RecipeSerializer.Meta.fields + ['description', 'image']
+        fields = RecipeSerializer.Meta.fields + ['description']
 
 
 class RecipeImageSerializer(serializers.ModelSerializer):
@@ -94,4 +104,3 @@ class RecipeImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image']
         read_only_fields = ['id']
         extra_kwargs = {'image': {'required': 'True'}}
-
