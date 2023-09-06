@@ -41,8 +41,8 @@ class PrivateAPITagsTest(TestCase):
 
     def test_retrieve_tags(self):
 
-        Tag.objects.create(user=self.user, name='Mickey')
-        Tag.objects.create(user=self.user, name='Mouse')
+        Tag.objects.create(user=self.user, name='vegan')
+        Tag.objects.create(user=self.user, name='dessert')
 
         res = self.client.get(TAGS_URL)
         tags = Tag.objects.all().order_by('-name')
@@ -79,7 +79,7 @@ class PrivateAPITagsTest(TestCase):
 
     def test_delete_tag(self):
 
-        tag = Tag.objects.create(user=self.user, name='Brekfast')
+        tag = Tag.objects.create(user=self.user, name='Breakfast')
 
         url = detail_url(tag.id)
         res = self.client.delete(url)

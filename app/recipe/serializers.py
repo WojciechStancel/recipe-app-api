@@ -28,7 +28,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 user=auth_user,
                 **tag
             )
-        recipe.tags.add(tag_obj)
+            recipe.tags.add(tag_obj)
 
     def create(self, validated_data):
 
